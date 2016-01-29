@@ -2820,6 +2820,7 @@ def _test_bucket_create_naming_good_long(length):
 @attr(method='put')
 @attr(operation='create w/250 byte name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_good_long_250():
     _test_bucket_create_naming_good_long(250)
 
@@ -2830,6 +2831,7 @@ def test_bucket_create_naming_good_long_250():
 @attr(method='put')
 @attr(operation='create w/251 byte name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_good_long_251():
     _test_bucket_create_naming_good_long(251)
 
@@ -2840,6 +2842,7 @@ def test_bucket_create_naming_good_long_251():
 @attr(method='put')
 @attr(operation='create w/252 byte name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_good_long_252():
     _test_bucket_create_naming_good_long(252)
 
@@ -2879,6 +2882,7 @@ def test_bucket_create_naming_good_long_255():
 @attr(method='get')
 @attr(operation='list w/251 byte name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_list_long_name():
     prefix = get_new_bucket_name()
     length = 251
@@ -2919,6 +2923,7 @@ def test_bucket_create_naming_bad_punctuation():
 @attr(method='put')
 @attr(operation='create w/underscore in name')
 @attr(assertion='succeeds')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_underscore():
     check_good_bucket_name('foo_bar')
 
@@ -2929,6 +2934,7 @@ def test_bucket_create_naming_dns_underscore():
 @attr(method='put')
 @attr(operation='create w/100 byte name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_long():
     prefix = get_prefix()
     assert len(prefix) < 50
@@ -2942,6 +2948,7 @@ def test_bucket_create_naming_dns_long():
 @attr(method='put')
 @attr(operation='create w/dash at end of name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_dash_at_end():
     check_good_bucket_name('foo-')
 
@@ -2952,6 +2959,7 @@ def test_bucket_create_naming_dns_dash_at_end():
 @attr(method='put')
 @attr(operation='create w/.. in name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_dot_dot():
     check_good_bucket_name('foo..bar')
 
@@ -2962,6 +2970,7 @@ def test_bucket_create_naming_dns_dot_dot():
 @attr(method='put')
 @attr(operation='create w/.- in name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_dot_dash():
     check_good_bucket_name('foo.-bar')
 
@@ -2972,6 +2981,7 @@ def test_bucket_create_naming_dns_dot_dash():
 @attr(method='put')
 @attr(operation='create w/-. in name')
 @attr(assertion='fails with subdomain')
+@attr('fails_on_aws') # <Error><Code>InvalidBucketName</Code><Message>The specified bucket is not valid.</Message>...</Error>
 def test_bucket_create_naming_dns_dash_dot():
     check_good_bucket_name('foo-.bar')
 
@@ -3054,6 +3064,7 @@ def test_bucket_acl_default():
 @attr(method='get')
 @attr(operation='public-read acl')
 @attr(assertion='read back expected defaults')
+@attr('fails_on_aws') # <Error><Code>IllegalLocationConstraintException</Code><Message>The unspecified location constraint is incompatible for the region specific endpoint this request was sent to.</Message>
 def test_bucket_acl_canned_during_create():
     name = get_new_bucket_name()
     bucket = targets.main.default.connection.create_bucket(name, policy = 'public-read')
@@ -3482,6 +3493,7 @@ def test_object_acl_canned_bucketownerfullcontrol():
 @attr(method='put')
 @attr(operation='set write-acp')
 @attr(assertion='does not modify owner')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_object_acl_full_control_verify_owner():
     bucket = get_new_bucket(targets.main.default)
     bucket.set_acl('public-read-write')
@@ -3572,6 +3584,7 @@ def _build_bucket_acl_xml(permission, bucket=None):
 @attr(method='ACLs')
 @attr(operation='set acl FULL_CONTROL (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_xml_fullcontrol():
     _build_bucket_acl_xml('FULL_CONTROL')
 
@@ -3580,6 +3593,7 @@ def test_bucket_acl_xml_fullcontrol():
 @attr(method='ACLs')
 @attr(operation='set acl WRITE (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_xml_write():
     _build_bucket_acl_xml('WRITE')
 
@@ -3588,6 +3602,7 @@ def test_bucket_acl_xml_write():
 @attr(method='ACLs')
 @attr(operation='set acl WRITE_ACP (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_xml_writeacp():
     _build_bucket_acl_xml('WRITE_ACP')
 
@@ -3596,6 +3611,7 @@ def test_bucket_acl_xml_writeacp():
 @attr(method='ACLs')
 @attr(operation='set acl READ (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_xml_read():
     _build_bucket_acl_xml('READ')
 
@@ -3604,6 +3620,7 @@ def test_bucket_acl_xml_read():
 @attr(method='ACLs')
 @attr(operation='set acl READ_ACP (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_xml_readacp():
     _build_bucket_acl_xml('READ_ACP')
 
@@ -3642,6 +3659,7 @@ def _build_object_acl_xml(permission):
 @attr(method='ACLs')
 @attr(operation='set acl FULL_CONTROL (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_object_acl_xml():
     _build_object_acl_xml('FULL_CONTROL')
 
@@ -3650,6 +3668,7 @@ def test_object_acl_xml():
 @attr(method='ACLs')
 @attr(operation='set acl WRITE (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_object_acl_xml_write():
     _build_object_acl_xml('WRITE')
 
@@ -3658,6 +3677,7 @@ def test_object_acl_xml_write():
 @attr(method='ACLs')
 @attr(operation='set acl WRITE_ACP (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_object_acl_xml_writeacp():
     _build_object_acl_xml('WRITE_ACP')
 
@@ -3666,6 +3686,7 @@ def test_object_acl_xml_writeacp():
 @attr(method='ACLs')
 @attr(operation='set acl READ (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_object_acl_xml_read():
     _build_object_acl_xml('READ')
 
@@ -3674,6 +3695,7 @@ def test_object_acl_xml_read():
 @attr(method='ACLs')
 @attr(operation='set acl READ_ACP (xml)')
 @attr(assertion='reads back correctly')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_object_acl_xml_readacp():
     _build_object_acl_xml('READ_ACP')
 
@@ -3782,6 +3804,7 @@ def _check_bucket_acl_grant_cant_writeacp(bucket):
 @attr(method='ACLs')
 @attr(operation='set acl w/userid FULL_CONTROL')
 @attr(assertion='can read/write data/acls')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${USER}</ArgumentValue>
 def test_bucket_acl_grant_userid_fullcontrol():
     bucket = _bucket_acl_grant_userid('FULL_CONTROL')
 
@@ -3805,6 +3828,7 @@ def test_bucket_acl_grant_userid_fullcontrol():
 @attr(method='ACLs')
 @attr(operation='set acl w/userid READ')
 @attr(assertion='can read data, no other r/w')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_bucket_acl_grant_userid_read():
     bucket = _bucket_acl_grant_userid('READ')
 
@@ -3822,6 +3846,7 @@ def test_bucket_acl_grant_userid_read():
 @attr(method='ACLs')
 @attr(operation='set acl w/userid READ_ACP')
 @attr(assertion='can read acl, no other r/w')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_bucket_acl_grant_userid_readacp():
     bucket = _bucket_acl_grant_userid('READ_ACP')
 
@@ -3839,6 +3864,7 @@ def test_bucket_acl_grant_userid_readacp():
 @attr(method='ACLs')
 @attr(operation='set acl w/userid WRITE')
 @attr(assertion='can write data, no other r/w')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_bucket_acl_grant_userid_write():
     bucket = _bucket_acl_grant_userid('WRITE')
 
@@ -3856,6 +3882,7 @@ def test_bucket_acl_grant_userid_write():
 @attr(method='ACLs')
 @attr(operation='set acl w/userid WRITE_ACP')
 @attr(assertion='can write acls, no other r/w')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_bucket_acl_grant_userid_writeacp():
     bucket = _bucket_acl_grant_userid('WRITE_ACP')
 
@@ -3939,6 +3966,7 @@ def _get_acl_header(user=None, perms=None):
 @attr(operation='add all grants to user through headers')
 @attr(assertion='adds all grants individually to second user')
 @attr('fails_on_dho')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_object_header_acl_grants():
     bucket = get_new_bucket()
     headers = _get_acl_header()
@@ -3998,6 +4026,7 @@ def test_object_header_acl_grants():
 @attr(operation='add all grants to user through headers')
 @attr(assertion='adds all grants individually to second user')
 @attr('fails_on_dho')
+@attr('fails_on_aws') #  <Error><Code>InvalidArgument</Code><Message>Invalid id</Message><ArgumentName>CanonicalUser/ID</ArgumentName><ArgumentValue>${ALTUSER}</ArgumentValue>
 def test_bucket_header_acl_grants():
     headers = _get_acl_header()
     bucket = get_new_bucket(targets.main.default, get_prefix(), headers)
@@ -4062,6 +4091,7 @@ def test_bucket_header_acl_grants():
 @attr(method='ACLs')
 @attr(operation='add second FULL_CONTROL user')
 @attr(assertion='works for S3, fails for DHO')
+@attr('fails_on_aws') #  <Error><Code>AmbiguousGrantByEmailAddress</Code><Message>The e-mail address you provided is associated with more than one account. Please retry your request using a different identification method or after resolving the ambiguity.</Message>
 def test_bucket_acl_grant_email():
     bucket = get_new_bucket()
     # add alt user
